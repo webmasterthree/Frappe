@@ -1,0 +1,25 @@
+{
+ "cards": [
+  {
+   "card": "Total Earned Points"
+  }
+ ],
+ "charts": [
+  {
+   "chart": "Loyality Point",
+   "width": "Full"
+  }
+ ],
+ "creation": "2024-11-26 15:19:47.352461",
+ "dashboard_name": "SE - Loyality Dashboard",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 1,
+ "is_default": 0,
+ "is_standard": 1,
+ "modified": "2024-11-27 12:59:59.156215",
+ "modified_by": "Administrator",
+ "module": "SE",
+ "name": "SE - Loyality Dashboard",
+ "owner": "Administrator"
+}

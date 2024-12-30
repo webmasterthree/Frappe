@@ -1,0 +1,182 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:naming_series",
+ "creation": "2024-11-23 18:08:37.374955",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_zdhp",
+  "channel_partner",
+  "column_break_hpfi",
+  "naming_series",
+  "section_break_pqmz",
+  "supplier",
+  "column_break_byas",
+  "supplier_name",
+  "section_break_hjvj",
+  "items",
+  "section_break_xkcz",
+  "total_quantity",
+  "column_break_gsmj",
+  "total_amount",
+  "section_break_dbsd",
+  "amount_in_words",
+  "section_break_zaxy",
+  "additional_notes",
+  "section_break_6jiw",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_6jiw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "CP Supplier Quotation",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Series",
+   "options": "CP-SQTN-.MM.-.YY.-00001",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "print_hide": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_pqmz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "supplier.supplier_name",
+   "fieldname": "supplier_name",
+   "fieldtype": "Data",
+   "label": "Supplier Name"
+  },
+  {
+   "fieldname": "column_break_byas",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_hjvj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "CP Supplier Quotation Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_xkcz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_quantity",
+   "fieldtype": "Int",
+   "label": "Total Quantity",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_gsmj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
+   "non_negative": 1,
+   "placeholder": "\u20b9 0.00",
+   "precision": "2"
+  },
+  {
+   "fieldname": "section_break_zaxy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "additional_notes",
+   "fieldtype": "Data",
+   "label": "Additional Notes"
+  },
+  {
+   "fieldname": "section_break_dbsd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "amount_in_words",
+   "fieldtype": "Small Text",
+   "label": "Amount (In Words)",
+   "max_height": "40px"
+  },
+  {
+   "fieldname": "section_break_zdhp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "channel_partner",
+   "fieldtype": "Link",
+   "label": "Channel Partner",
+   "options": "Channel Partner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hpfi",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-12-05 12:18:15.088077",
+ "modified_by": "Administrator",
+ "module": "CP Buying",
+ "name": "CP Supplier Quotation",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Channel Partner",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

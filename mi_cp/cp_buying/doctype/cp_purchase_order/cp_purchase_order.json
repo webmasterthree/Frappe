@@ -1,0 +1,202 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:naming_series",
+ "creation": "2024-11-25 14:49:59.125033",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "column_break_dawa",
+  "channel_partner",
+  "column_break_ikrb",
+  "status",
+  "section_break_ffqz",
+  "supplier",
+  "column_break_caal",
+  "supplier_name",
+  "section_break_zqjw",
+  "date",
+  "column_break_nlmi",
+  "required_by",
+  "section_break_wurs",
+  "items",
+  "section_break_afna",
+  "total_quantity",
+  "column_break_rwog",
+  "total_amount",
+  "section_break_bjzj",
+  "total_amount_in_words",
+  "section_break_pkza",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Series",
+   "options": "CP-PUR-ORD-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "channel_partner",
+   "fieldtype": "Link",
+   "label": "Channel Partner",
+   "options": "Channel Partner",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_dawa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ffqz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier ",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_caal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "supplier.supplier_name",
+   "fieldname": "supplier_name",
+   "fieldtype": "Data",
+   "label": "Supplier Name"
+  },
+  {
+   "fieldname": "section_break_zqjw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "required_by",
+   "fieldtype": "Date",
+   "label": "Required By",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_nlmi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_wurs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_afna",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_quantity",
+   "fieldtype": "Int",
+   "label": "Total Quantity",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_rwog",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_bjzj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_amount_in_words",
+   "fieldtype": "Small Text",
+   "label": "Total Amount (In words)",
+   "max_height": "40px"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "CP Purchase Order Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "CP Purchase Order",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_pkza",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nCancel\nDispatch",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ikrb",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-06 12:54:40.113907",
+ "modified_by": "Administrator",
+ "module": "CP Buying",
+ "name": "CP Purchase Order",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Channel Partner",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "channel_partner",
+ "show_name_in_global_search": 1,
+ "show_preview_popup": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

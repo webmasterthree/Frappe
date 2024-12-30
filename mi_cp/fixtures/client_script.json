@@ -1,0 +1,167 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Item Name",
+  "enabled": 1,
+  "modified": "2024-11-20 16:20:54.524436",
+  "module": null,
+  "name": "Item Code",
+  "script": "// frappe.ui.form.on('Item Name', {\n//     before_save: function (frm) {\n//         // Check if the item_code is empty\n//         if (!frm.doc.item_code) {\n//             // Generate a random number and ensure it's in the range 00001 to 99999\n//             let random_number = Math.floor(Math.random() * 99999 + 1);\n            \n//             // Pad the number to ensure it is 5 digits\n//             let padded_number = String(random_number).padStart(5, '0');\n            \n//             // Set the item_code in the format ITEM-00001\n//             frm.set_value('item_code', `ITEM-${padded_number}`);\n//         }\n//     }\n// });\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "My Stock",
+  "enabled": 0,
+  "modified": "2024-11-20 17:39:02.697110",
+  "module": null,
+  "name": "Stock Child Data Test",
+  "script": "// frappe.ui.form.on('My Stock', {\n// \trefresh(frm) {\n// \t\t// your code here\n// \t}\n// })\n\n// frappe.ui.form.on('Stock Item', {\n// \trefresh(frm) {\n// \t\t// your code here\n// \t}\n// })\n\nfrappe.ui.form.on('My Stock', {\n    refresh: function (frm) {\n        // Example: Loop through child table rows\n        frm.fields_dict.items.grid.get_selected_children().forEach(row => {\n            console.log(`Item Code: ${row.item_code}, Item Name: ${row.item_name}`);\n        });\n    },\n    \n    // Triggered when a value changes in the child table\n    items_on_form_rendered: function (frm) {\n        frm.fields_dict.items.grid.get_field('item_code').df.onchange = function (row) {\n            frappe.msgprint(`You selected Item Code: ${row.item_code}`);\n        };\n    },\n});\n\n// For accessing specific child rows\nfrappe.ui.form.on('Stock Item', {\n    item_code: function (frm, cdt, cdn) {\n        const row = locals[cdt][cdn];\n        console.log(`Row Item Code: ${row.item_code}`);\n    },\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Price",
+  "enabled": 0,
+  "modified": "2024-11-20 17:44:34.611681",
+  "module": "",
+  "name": "Sales Price",
+  "script": "// frappe.ui.form.on('Sales Price', {\n// \trefresh(frm) {\n// \t\t// your code here\n// \t}\n// })\n\nfrappe.ui.form.on('Stock Item', {\n    item_code: function (frm, cdt, cdn) {\n        const row = locals[cdt][cdn];\n\n        if (row.item_code) {\n            // Fetch item details from the Item doctype\n            frappe.call({\n                method: 'frappe.client.get',\n                args: {\n                    doctype: 'Item Name',\n                    name: row.item_code\n                },\n                callback: function (response) {\n                    if (response.message) {\n                        const item = response.message;\n\n                        // Set the item name in the child table row\n                        frappe.model.set_value(cdt, cdn, 'item_name', item.item_name);\n\n                        // Optional: Update the parent doctype field with the latest item name\n                        update_parent_item_name(frm);\n                    }\n                }\n            });\n        } else {\n            // Reset the parent field if no item_code is selected\n            update_parent_item_name(frm);\n        }\n    }\n});\n\n// Function to update the Item Name in the parent doctype\nfunction update_parent_item_name(frm) {\n    let all_item_names = [];\n\n    // Loop through child table rows and collect item names\n    frm.doc.items.forEach(row => {\n        if (row.item_name) {\n            all_item_names.push(row.item_name);\n        }\n    });\n\n    // Update the parent doctype's field (e.g., item_name in parent)\n    frm.set_value('item_name', all_item_names.join(', ')); // Combine item names\n}\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Customer Sales Order",
+  "enabled": 1,
+  "modified": "2024-11-23 11:18:32.861373",
+  "module": "CP Sales",
+  "name": "Stock Error",
+  "script": "frappe.ui.form.on(\"Customer Sales Order Item\", {\n    quantity: function (frm, cdt, cdn) {\n        // Get the current row in the child table\n        let row = locals[cdt][cdn];\n        \n        // Ensure item_code is selected\n        if (!row.item_code) {\n            frappe.msgprint(__('Please select an item first.'));\n            return;\n        }\n        \n        // Fetch the total quantity available in stock for the specified item\n        frappe.call({\n            method: \"mi_cp.api.get_stock_quantity\", // Replace with your actual method\n            args: {\n                item_code: row.item_code\n            },\n            callback: function (r) {\n                if (r.message) {\n                    let totalQuantityAvailable = r.message; // Total stock available\n                    \n                    if (row.quantity > totalQuantityAvailable) {\n                        frappe.msgprint(__('Warning: Item \"{0}\" has insufficient stock. Only {1} units available.',\n                            [row.item_code, totalQuantityAvailable]));\n                        \n                        // Optionally reset the quantity to the available stock\n                        frappe.model.set_value(cdt, cdn, \"quantity\", totalQuantityAvailable);\n                    }\n                } else {\n                    frappe.msgprint(__('Item \"{0}\" is not available in stock.', [row.item_code]));\n                    frappe.model.set_value(cdt, cdn, \"quantity\", 0); // Reset quantity to 0 if no stock\n                }\n            }\n        });\n    }\n});\n\n\n// frappe.ui.form.on(\"Customer Sales Order Item\", {\n//     quantity: function(frm, cdt, cdn) {\n//         let row = locals[cdt][cdn];\n        \n//         if (!row.item_code) {\n//             frappe.msgprint(__('Please select an item first.'));\n//             return;\n//         }\n        \n//         // Fetch the total quantity available in stock for the specified item\n//         frappe.call({\n//             method: \"frappe.client.get_list\",\n//             args: {\n//                 doctype: \"Stock Item\",\n//                 filters: { item_code: row.item_code },\n//                 fields: [\"quantity\"]  // Adjust to match the actual stock quantity field quantity\n//             },\n//             callback: function(r) {\n//                 if (r.message && r.message.length > 0) {\n//                     // Sum up total available quantity across all records for this item\n//                     let totalQuantityAvailable = r.message.reduce((total, stockRow) => total + stockRow.quantity, 0);\n\n//                     // Compare the entered quantity with the total stock quantity\n//                     if (row.quantity > totalQuantityAvailable) {\n//                         frappe.msgprint(__('Warning: Item \"{0}\" has insufficient stock. Only {1} units available.', \n//                             [row.item_code, totalQuantityAvailable]));\n                        \n//                         // Optionally, you could reset the quantity to the available stock\n//                         frappe.model.set_value(cdt, cdn, \"quantity\", totalQuantityAvailable);\n//                     }\n//                 } else {\n//                     frappe.msgprint(__('Item \"{0}\" is not available in stock.', [row.item_code]));\n                    \n//                     // Optionally, you could reset the quantity to 0 if no stock is available\n//                     frappe.model.set_value(cdt, cdn, \"quantity\", 0);\n//                 }\n//             }\n//         });\n//     }\n// });",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Workspace",
+  "enabled": 0,
+  "modified": "2024-11-28 18:18:24.329459",
+  "module": null,
+  "name": "CP Module Route",
+  "script": "frappe.ui.form.on('Workspace', {\n    refresh: function(frm) {\n        // Check if the Workspace title is \"Stock\"\n        if (frm.doc.title === 'Stock') {\n            // Wait until the document is ready\n            $(document).ready(function() {\n                // Ensure that the page content has fully loaded and the element is present\n                setTimeout(function() {\n                    // Find the anchor tag with title \"Stock\" in the sidebar\n                    var stock_link = $('.item-anchor[title=\"Stock\"]');\n\n                    // Check if the element exists\n                    if (stock_link.length > 0) {\n                        // Modify the href attribute to the desired URL\n                        stock_link.attr('href', '/app/channel-partner');\n\n                        // Optionally, change the displayed text\n                        stock_link.find('.sidebar-item-label').text('Channel Partner');\n                    } else {\n                        console.log(\"Stock workspace link element not found.\");\n                    }\n                }, 500); // Delay to ensure the link is rendered (500ms should be sufficient)\n            });\n        }\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "My Stock",
+  "enabled": 1,
+  "modified": "2024-12-02 13:00:54.247714",
+  "module": null,
+  "name": "Adding Button in My Stock",
+  "script": " frappe.listview_settings[\"My Stock\"] = {\n    hide_name_column: true,\n    add_fields: [\"channel_partner\"],\n\n    button: {\n        show: function(doc) {\n            return doc.channel_partner;  // Show button if channel_partner exists\n        },\n        get_label: function() {\n            return __(\"Stock List\", null, \"Access\");\n        },\n        get_description: function(doc) {\n            return __(\"Click to view report for {0}\", [doc.name]);\n        },\n        action: function(doc) {\n            // Redirect to the query report with the channel_partner filter\n            let report_url = \"/app/query-report/Stock?channel_partner=\" + encodeURIComponent(doc.channel_partner);\n            window.location.href = report_url;  // Redirects to the specified URL\n        },\n    }\n};\n\n// frappe.listview_settings[\"My Stock\"] = {\n//     hide_name_column: true,\n//     add_fields: [\"channel_partner\"],\n\n//     button: {\n//         show: function(doc) {\n//             return doc.channel_partner;  // Show button if channel_partner exists\n//         },\n//         get_label: function() {\n//             return __(\"Stock List\", null, \"Access\");\n//         },\n//         get_description: function(doc) {\n//             return __(\"Click to view report for {0}\", [doc.name]);\n//         },\n//         action: function(doc) {\n//             // Redirect to the query report directly\n//             window.location.href = \"/app/query-report/Stock\";  // Redirects to the specified URL\n//         },\n//     }\n// };\n\n// frappe.listview_settings[\"My Stock\"] = {\n//     hide_name_column: true,\n//     add_fields: [\"channel_partner\"],\n\n//     button: {\n//         show: function(doc) {\n//             return doc.channel_partner;  // You can modify the condition based on your requirement\n//         },\n//         get_label: function() {\n//             return __(\"Stock List\", null, \"Access\");\n//         },\n//         get_description: function(doc) {\n//             return __(\"Open {0}\", [doc.name]);  // Show document name or any other relevant field\n//         },\n//         action: function(doc) {\n//             frappe.set_route(\"Form\", \"My Stock\", doc.name);  // Navigate to the form view of the 'My Stock' doctype\n//         },\n//     }\n// };\n",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Channel Partner",
+  "enabled": 0,
+  "modified": "2024-12-02 15:14:22.218275",
+  "module": null,
+  "name": "Button",
+  "script": " frappe.ui.form.on('Channel Partner', {\n    refresh: function (frm) {\n        frm.add_custom_button('CP Stock', function () {\n            const url = '/app/my-stock/view/list';\n            window.open(url, '_blank');\n        }).addClass('btn-primary');\n        frm.add_custom_button('CP Purchase Order', function () {\n            const url = '/app/cp-purchase-order/view/list';\n            // const url = `/app/cp-purchase-order/view/list?channel_partner=${encodeURIComponent(channel_partner)}`;\n\n\n            window.open(url, '_blank');\n        }).addClass('btn-primary');\n\n        frm.add_custom_button('CP Material Request', function () {\n            const url = '/app/cp-material-request/view/list';\n            window.open(url, '_blank');\n        }).addClass('btn-primary');\n\n        frm.add_custom_button('CP Supplier Quotation', function () {\n            const url = '/app/cp-supplier-quotation/view/list';\n            window.open(url, '_blank');\n        }).addClass('btn-primary');\n\n        frm.add_custom_button('Sales Quotation', function () {\n            const url = '/app/sales-quotation/view/list';\n            window.open(url, '_blank');\n        }).addClass('btn-primary');\n\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Channel Partner",
+  "enabled": 1,
+  "modified": "2024-12-06 12:45:51.417376",
+  "module": null,
+  "name": "Adding multiple Partner in CP List",
+  "script": " frappe.listview_settings[\"Channel Partner\"] = {\n    hide_name_column: true,\n    add_fields: [\"channel_partner\"],\n    button: {\n        show: function(doc) {\n            return doc.channel_partner;  // Show button if channel_partner exists\n        },\n        get_label: function() {\n            return __(\"Stock\", null, \"Access\");\n        },\n        get_description: function(doc) {\n            return __(\"Click to view report for {0}\", [doc.name]);\n        },\n        action: function(doc) {\n            // Redirect to the query report with the channel_partner filter\n            let report_url = \"/app/query-report/Stock?channel_partner=\" + encodeURIComponent(doc.channel_partner);\n            window.location.href = report_url;  // Redirects to the specified URL\n        },\n    }\n};\n\n\n\n\n\n\n",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "My Stock",
+  "enabled": 1,
+  "modified": "2024-12-03 10:34:32.356056",
+  "module": null,
+  "name": "My Stock Database",
+  "script": "frappe.ui.form.on('My Stock', {\n    refresh: function (frm) {\n        frappe.call({\n            method: 'frappe.client.get_list',\n            args: {\n                doctype: 'My Stock',\n                fields: ['channel_partner','items.item_name','items.quantity']\n            },\n            callback: function (data) {\n                console.log(data.message); // Render table with data\n            }\n        });\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "CP Supplier Quotation",
+  "enabled": 1,
+  "modified": "2024-12-04 15:51:55.868375",
+  "module": null,
+  "name": "CP Supplier Quotation price",
+  "script": "// frappe.ui.form.on('CP Supplier Quotation', {\n// \trefresh(frm) {\n// \t\t// your code here\n// \t}\n// })\n\n// frappe.ui.form.on('CP Supplier Quotation Item', {\n// \trefresh(frm) {\n// \t\t// your code here\n// \t}\n// })\nfrappe.ui.form.on('CP Supplier Quotation Item', {\n    item_code: function(frm, cdt, cdn) {\n        var row = locals[cdt][cdn];\n        \n        // Fetching Item details including Item Name, Pack Type, and Pack Size\n        if (row.item_code) {\n            frappe.call({\n                method: 'frappe.client.get',\n                args: {\n                    doctype: 'Sales Price',\n                    name: row.item_code\n                },\n                callback: function(data) {\n                    if (data.message) {\n                        frappe.model.set_value(cdt, cdn, 'price', data.message.selling_price);\n                    }\n                }\n            });\n        }\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Executive",
+  "enabled": 1,
+  "modified": "2024-12-06 12:47:25.666141",
+  "module": "SE",
+  "name": "Earned Loyality Points",
+  "script": "frappe.listview_settings[\"Sales Executive\"] = {\n    hide_name_column: true,\n    add_fields: [\"sales_executive\"],\n\n    button: {\n        show: function(doc) {\n            return doc.sales_executive;  // Show button if sales_executive exists\n        },\n\n        get_label: function() {\n            return __(\"Earned Loyalty Points\", null, \"Access\");\n        },\n\n        get_description: function(doc) {\n            return __(\"Click to view report for Sales Executive: {0}\", [doc.name]);\n        },\n\n        action: function(doc) {\n            // Generate the report URL with sales_executive and doctype as parameters\n            let report_url = \"/app/query-report/Earned%20Loyality%20Points?sales_executive=\" + encodeURIComponent(doc.sales_executive);\n            \n            // Ensure the correct doctype is passed along with the sales_executive\n            // report_url += \"&doctype=\" + encodeURIComponent(\"Sales Executive\");\n\n            // Redirect to the generated URL\n            window.location.href = report_url;\n        },\n    }\n};\n\n\n\n\n///app/query-report/Earned%20Loyality%20Points\n\n//let report_url = \"/app/query-report/Earned Loyalty Points?sales_executive=\" + encodeURIComponent(doc.sales_executive);\n\n\n// frappe.listview_settings[\"Channel Partner\"] = {\n//     hide_name_column: true,\n//     add_fields: [\"channel_partner\"],\n//     button: {\n//         show: function(doc) {\n//             return doc.channel_partner;  // Show button if channel_partner exists\n//         },\n//         get_label: function() {\n//             return __(\"Stock\", null, \"Access\");\n//         },\n//         get_description: function(doc) {\n//             return __(\"Click to view report for {0}\", [doc.name]);\n//         },\n//         action: function(doc) {\n//             // Redirect to the query report with the channel_partner filter\n//             let report_url = \"/app/query-report/Stock?channel_partner=\" + encodeURIComponent(doc.channel_partner);\n//             window.location.href = report_url;  // Redirects to the specified URL\n//         },\n//     }\n// };\n\n\n\n\n\n",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Item Name",
+  "enabled": 1,
+  "modified": "2024-12-06 17:12:11.554724",
+  "module": "CP Stock",
+  "name": "Table Data",
+  "script": "frappe.ui.form.on('Item Name', {\n    refresh: function (frm) {\n        // Call the server-side method to get the HTML table\n        frappe.call({\n            method: 'mi_cp.item.get_item',  // Ensure this path is correct\n            callback: function(response) {\n                if (response.message) {\n                    // Inject the HTML table into the custom HTML field (items_table)\n                    frm.fields_dict.items_table.$wrapper.html(response.message);\n                } else {\n                    frappe.msgprint(__('Failed to fetch data.'));\n                }\n            }\n        });\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Channel Partner",
+  "enabled": 1,
+  "modified": "2024-12-07 17:32:00.969045",
+  "module": null,
+  "name": "User Permission",
+  "script": "frappe.ui.form.on('User Permission Item', {\n    user: function(frm, cdt, cdn) {\n        const row = frappe.get_doc(cdt, cdn); // Get the current row in the child table\n        \n        // Check if the user_id is set in the parent document (Channel Partner)\n        if (frm.doc.user_id) {\n            row.user = frm.doc.user_id; // Set the user field in the child row to the user_id from the parent\n            frm.refresh_field('user_permission'); // Refresh the child table to reflect the change\n        } else {\n            frappe.msgprint(__('Please set the User ID in the Channel Partner.'));\n        }\n    }\n});\n\n\n\n// frappe.ui.form.on('User Permission Item', {\n//     user: function(frm, cdt, cdn) {\n//         const row = frappe.get_doc(cdt, cdn); // Get the current row\n//         if (row.user) {\n//             frappe.msgprint(__('User: ' + row.user)); // Display the user field value\n//         }\n//     }\n// });\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Channel Partner",
+  "enabled": 1,
+  "modified": "2024-12-09 11:44:15.453220",
+  "module": null,
+  "name": "Toggle Sidebar",
+  "script": "frappe.listview_settings['Channel Partner'] = {\n\trefresh: function(listview) {\n        $('span.sidebar-toggle-btn').hide();\n        $('.col-lg-2.layout-side-section').hide();\n\t}\n};\n",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "My Stock",
+  "enabled": 1,
+  "modified": "2024-12-11 10:52:01.375240",
+  "module": "CP Stock",
+  "name": "Hiding ID",
+  "script": "frappe.listview_settings['My Stock'] = {\n    add_fields: ['item_name', 'item_code'], // Include fields you want to display\n    hide_fields: ['name'], // Custom field hiding (not directly supported but for clarity)\n    onload: function (listview) {\n        // Dynamically modify the list view\n        listview.columns = listview.columns.filter(column => column.id !== 'name');\n    },\n};\n\n",
+  "view": "List"
+ }
+]

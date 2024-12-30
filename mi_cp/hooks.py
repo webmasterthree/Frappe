@@ -5,21 +5,48 @@ app_description = "Mohan Impex CP"
 app_email = "daiyanalamnit@gmail.com"
 app_license = "mit"
 
+whitelisted = ["mi_cp.stock.cp_stock"]
+
+# Whitelisted methods
+override_whitelisted_methods = {
+    "mi_cp.employee_report.generate_employee_report": "mi_cp.employee_report.generate_employee_report"
+}
+
+override_whitelisted_methods = {
+    "mi_cp.detail_report_download.download_employee_report": "mi_cp.detail_report_download.download_employee_report"
+}
+
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = []
 
-# Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "mi_cp",
-# 		"logo": "/assets/mi_cp/logo.png",
-# 		"title": "Mohan Impex CP",
-# 		"route": "/mi_cp",
-# 		"has_permission": "mi_cp.api.permission.has_app_permission"
-# 	}
+#Each item in the list will be shown as an app in the apps page
+add_to_apps_screen = [
+	{
+		"name": "mi_cp",
+		"logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIokfmWyfJWEL17Xm88E7E-g3oGrMPb4U49Q&s",
+		"title": "Mohan Impex CP",
+		"route": "/app/mohan_impex/",
+		# "has_permission": "mi_cp.api.permission.has_app_permission"
+	}
+]
+
+# fixtures = [
+#     {"dt": "Custom Field", "filters": [["dt", "=", "Employee"]]},
+#     {"dt": "Property Setter", "filters": [["doc_type", "=", "Employee"]]},
 # ]
+fixtures = [
+     "Employee",
+]
+
+fixtures = [
+    {"doctype": "Client Script"}
+]
+fixtures = [
+    {"doctype": "Report"},
+    {"doctype": "Server Script"}
+]
 
 # Includes in <head>
 # ------------------
@@ -242,3 +269,5 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+
+website_route_rules = [{'from_route': '/frontend/<path:app_path>', 'to_route': 'frontend'}, {'from_route': '/frontend/<path:app_path>', 'to_route': 'frontend'}, {'from_route': '/mi_cp/<path:app_path>', 'to_route': 'mi_cp'},]

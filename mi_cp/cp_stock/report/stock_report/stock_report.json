@@ -1,0 +1,31 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2024-11-23 10:34:03.729916",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 4,
+ "is_standard": "Yes",
+ "letterhead": null,
+ "modified": "2024-11-23 15:28:49.007520",
+ "modified_by": "Administrator",
+ "module": "CP Stock",
+ "name": "Stock Report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT \n    stock.item_name AS ITEM_NAME,\n    stock.TOTAL_QUANTITY AS AVAILABLE_STOCK,\n    COALESCE(sales.SOLD_OUT_QUANTITY, 0) AS SOLD_OUT_QUANTITY,\n    (stock.TOTAL_QUANTITY - COALESCE(sales.SOLD_OUT_QUANTITY, 0)) AS REMAINING_STOCK,\n    stock.PURCHASE_PRICE AS PURCHASE_PRICE,\n    stock.PACT_TYPE AS PACK_TYPE,\n    stock.UNIT_OF_MEASUREMENT AS UNIT_OF_MEASUREMENT\nFROM \n    (SELECT \n        item_name,\n        SUM(quantity) AS TOTAL_QUANTITY,\n        purchase_price,\n        pack_size AS PACT_TYPE,\n        uom AS UNIT_OF_MEASUREMENT,\n        pack_type\n     FROM \n        `tabStock Item`\n     GROUP BY \n        item_name, purchase_price, pack_size, uom, pack_type) AS stock\nLEFT JOIN \n    (SELECT \n        item_name,\n        SUM(quantity) AS SOLD_OUT_QUANTITY,\n        price AS PRICE\n     FROM   \n        `tabCustomer Sales Receipt Item`\n     GROUP BY \n        item_name, price) AS sales\nON \n    stock.item_name = sales.item_name;\n\n ",
+ "ref_doctype": "My Stock",
+ "report_name": "Stock Report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Channel Partner"
+  }
+ ],
+ "timeout": 0
+}

@@ -1,0 +1,175 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:sales_executive",
+ "creation": "2024-11-26 12:50:26.351450",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "username",
+  "column_break_velo",
+  "role",
+  "section_break_yoxl",
+  "sales_executive",
+  "info_section",
+  "gender",
+  "phone",
+  "column_break_hhuk",
+  "mobile",
+  "section_break_lvnj",
+  "birth_date",
+  "column_break_owtt",
+  "location",
+  "login_details_section",
+  "last_active",
+  "column_break_ggph",
+  "data_ffdj"
+ ],
+ "fields": [
+  {
+   "fieldname": "username",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "username",
+   "options": "User",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "username.role_profile_name",
+   "fieldname": "role",
+   "fieldtype": "Data",
+   "label": "Role",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_velo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_yoxl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "info_section",
+   "fieldtype": "Section Break",
+   "label": "Info"
+  },
+  {
+   "fetch_from": "username.gender",
+   "fieldname": "gender",
+   "fieldtype": "Data",
+   "label": "Gender"
+  },
+  {
+   "fetch_from": "username.phone",
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone "
+  },
+  {
+   "fieldname": "column_break_hhuk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "username.mobile_no",
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile"
+  },
+  {
+   "fieldname": "section_break_lvnj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "username.birth_date",
+   "fieldname": "birth_date",
+   "fieldtype": "Data",
+   "label": "Birth Date"
+  },
+  {
+   "fetch_from": "username.location",
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "label": "Location"
+  },
+  {
+   "fieldname": "column_break_owtt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "login_details_section",
+   "fieldtype": "Section Break",
+   "label": "Login Details"
+  },
+  {
+   "fetch_from": "username.last_active",
+   "fieldname": "last_active",
+   "fieldtype": "Data",
+   "label": "Last Active"
+  },
+  {
+   "fetch_from": "username.last_ip",
+   "fieldname": "data_ffdj",
+   "fieldtype": "Data",
+   "label": "Last IP"
+  },
+  {
+   "fieldname": "column_break_ggph",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "username.full_name",
+   "fieldname": "sales_executive",
+   "fieldtype": "Data",
+   "label": "Sales Executive",
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-06 12:27:30.268820",
+ "modified_by": "Administrator",
+ "module": "SE",
+ "name": "Sales Executive",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Channel Partner",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Executive",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

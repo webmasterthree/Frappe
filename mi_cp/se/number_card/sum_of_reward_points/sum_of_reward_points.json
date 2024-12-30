@@ -1,0 +1,23 @@
+{
+ "color": "#0af267",
+ "creation": "2024-11-27 10:43:32.112993",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "filters_json": "{}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 0,
+ "is_standard": 1,
+ "label": "Total Reward_points",
+ "modified": "2024-11-27 10:48:04.996973",
+ "modified_by": "Administrator",
+ "module": "SE",
+ "name": "Sum of Reward_points",
+ "owner": "Administrator",
+ "report_field": "reward_points",
+ "report_function": "Sum",
+ "report_name": "Reward Points",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Report"
+}

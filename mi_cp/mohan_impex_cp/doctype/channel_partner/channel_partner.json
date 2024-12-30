@@ -1,0 +1,212 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:channel_partner",
+ "creation": "2024-11-21 19:16:26.001787",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "user_id",
+  "create_user",
+  "column_break_thng",
+  "role",
+  "section_break_zwhs",
+  "channel_partner",
+  "section_break_bpiy",
+  "info_column",
+  "gender",
+  "phone",
+  "mobile",
+  "birth_date",
+  "location",
+  "column_break_jhep",
+  "last_active",
+  "last_ip",
+  "user_permission_tab",
+  "section_break_kxtt",
+  "user_permission",
+  "stock_tab",
+  "stock_data_html",
+  "sales_data_tab",
+  "sales"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "fetch_from": "user_id.role_profile_name",
+   "fieldname": "role",
+   "fieldtype": "Data",
+   "label": "Role"
+  },
+  {
+   "fieldname": "section_break_bpiy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "info_column",
+   "fieldtype": "Column Break",
+   "label": "Info"
+  },
+  {
+   "bold": 1,
+   "fetch_from": "user_id.gender",
+   "fieldname": "gender",
+   "fieldtype": "Data",
+   "label": "Gender"
+  },
+  {
+   "bold": 1,
+   "fetch_from": "user_id.phone",
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone "
+  },
+  {
+   "bold": 1,
+   "fetch_from": "user_id.mobile_no",
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile"
+  },
+  {
+   "fieldname": "column_break_jhep",
+   "fieldtype": "Column Break",
+   "label": "Login Details"
+  },
+  {
+   "fetch_from": "user_id.birth_date",
+   "fieldname": "birth_date",
+   "fieldtype": "Data",
+   "label": "Birth Date"
+  },
+  {
+   "bold": 1,
+   "fetch_from": "user_id.location",
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "label": "Location"
+  },
+  {
+   "fetch_from": "user_id.last_active",
+   "fieldname": "last_active",
+   "fieldtype": "Data",
+   "label": "Last Active"
+  },
+  {
+   "bold": 1,
+   "fetch_from": "user_id.last_ip",
+   "fieldname": "last_ip",
+   "fieldtype": "Data",
+   "label": "Last IP"
+  },
+  {
+   "bold": 1,
+   "fetch_from": "user_id.full_name",
+   "fieldname": "channel_partner",
+   "fieldtype": "Data",
+   "label": "Channel Partner",
+   "unique": 1
+  },
+  {
+   "fieldname": "user_permission_tab",
+   "fieldtype": "Tab Break",
+   "label": "User Permission"
+  },
+  {
+   "fieldname": "user_permission",
+   "fieldtype": "Table",
+   "label": "User Permission",
+   "options": "User Permission Item"
+  },
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_list_view": 1,
+   "label": "User ID",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "create_user",
+   "fieldtype": "Button",
+   "label": "Create User",
+   "mandatory_depends_on": "eval:(!doc.user_id)"
+  },
+  {
+   "fieldname": "column_break_thng",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_zwhs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_kxtt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "stock_tab",
+   "fieldtype": "Tab Break",
+   "label": "Stock"
+  },
+  {
+   "fieldname": "sales_data_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sales Data"
+  },
+  {
+   "fieldname": "sales",
+   "fieldtype": "HTML",
+   "label": "Sales"
+  },
+  {
+   "fieldname": "stock_data_html",
+   "fieldtype": "HTML",
+   "label": "Stock"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-12-11 10:39:10.566412",
+ "modified_by": "Administrator",
+ "module": "Mohan Impex CP",
+ "name": "Channel Partner",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Channel Partner",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Executive",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
